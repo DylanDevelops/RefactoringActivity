@@ -4,7 +4,7 @@ public class Player
 {
     public int Health;
     public string CurrentLocation;
-    public List<string> Inventory;
+    public List<string> Inventory { get; private set; }
 
     public Player(int health)
     {
@@ -17,15 +17,25 @@ public class Player
     {
         if (Inventory.Count == 0)
         {
-            Console.WriteLine("Your inventory is empty.");
+            ShowInventoryEmpty();
         }
         else
         {
-            Console.WriteLine("You are carrying:");
-            foreach (string item in Inventory)
-            {
-                Console.WriteLine($"- {item}");
-            }
+            ShowInventoryFull();
         }
+    }
+
+    private void ShowInventoryFull()
+    {
+        Console.WriteLine("You are carrying:");
+        foreach (string item in Inventory)
+        {
+            Console.WriteLine($"- {item}");
+        }
+    }
+
+    private static void ShowInventoryEmpty()
+    {
+        Console.WriteLine("Your inventory is empty.");
     }
 }
