@@ -12,9 +12,9 @@ public class World
 
     private void InitializeWorld()
     {
-        Location start = new("Start", "You are at the starting point of your adventure.");
-        Location forest = new("Forest", "You are in a dense, dark forest.");
-        Location cave = new("Cave", "You see a dark, ominous cave.");
+        Location start = new("You are at the starting point of your adventure.");
+        Location forest = new("You are in a dense, dark forest.");
+        Location cave = new("You see a dark, ominous cave.");
 
         start.Exits.Add("north", "Forest");
         forest.Exits.Add("south", "Start");
