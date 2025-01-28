@@ -2,9 +2,9 @@
 
 public class Puzzle
 {
-    public string Name;
-    public string Question;
-    public string Answer;
+    public string Name { get; private set; }
+    private string Question;
+    private string Answer;
     
     public Puzzle(string name, string question, string answer)
     {
@@ -15,9 +15,20 @@ public class Puzzle
 
     public bool Solve()
     {
+        string playerAnswer = GetPlayerAnswer();
+        return playerAnswer == Answer.ToLower();
+    }
+
+    private string GetPlayerAnswer()
+    {
         Console.WriteLine($"Puzzle: {Question}");
         Console.Write("Your answer: ");
-        string playerAnswer = Console.ReadLine()?.ToLower();
-        return playerAnswer == Answer.ToLower();
+        return ReadAnswer();
+    }
+
+    private static string ReadAnswer()
+    {
+        string playerAnswer = Console.ReadLine() ?? "";
+        return playerAnswer.ToLower();
     }
 }
