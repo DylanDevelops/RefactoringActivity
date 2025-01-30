@@ -20,51 +20,53 @@ public class GameManager
             Console.Write("> ");
             input = Console.ReadLine()?.ToLower();
 
-            if (invalidInput(input))
+            if (IsInvalidInput(input))
             {
                 return;
             }
 
-            if (input == "help")
-            {
-                Help();
-            }
-            else if (input.StartsWith("go"))
-            {
-                Go(input);
-            }
-            else if (input.StartsWith("take"))
-            {
-                Take(input);
-            }
-            else if (input.StartsWith("use"))
-            {
-                Use(input);
-            }
-            else if (input == "inventory")
-            {
-                Inventory();
-            }
-            else if (input.StartsWith("solve"))
-            {
-                Solve(input);
-            }
-            else if (input == "quit")
-            {
-                Quit();
-            }
-            else
-            {
-                UnknownCommand();
-            }
+            ProcessInput(input);
         }
     }
 
-    private static bool invalidInput(string? input)
+    private static bool IsInvalidInput(string? input)
     {
-        if (string.IsNullOrEmpty(input)) 
-            return true;
-        return false;
+        return string.IsNullOrEmpty(input);
+    }
+
+    private void ProcessInput(string input)
+    {
+        string[] parts = input.Split(' ');
+        string command = parts[0];
+        string argument = parts.Length > 1 ? parts[1] : string.Empty;
+
+        switch (command)
+        {
+            case "help":
+                Help();
+                break;
+            case "go":
+                Go(argument);
+                break;
+            case "take":
+                Take(argument);
+                break;
+            case "use":
+                Use(argument);
+                break;
+            case "inventory":
+                Inventory();
+                break;
+            case "solve":
+                Solve(argument);
+                break;
+            case "quit":
+                Quit();
+                break;
+            default:
+                UnknownCommand();
+                break;
+        }
     }
 
     private static void UnknownCommand()
@@ -78,12 +80,10 @@ public class GameManager
         Console.WriteLine("Thanks for playing!");
     }
 
-    private void Solve(string input)
+    private void Solve(string puzzleName)
     {
-        string[] parts = input.Split(' ');
-        if (parts.Length > 1)
+        if (!string.IsNullOrEmpty(puzzleName))
         {
-            string puzzleName = parts[1];
             if (World.SolvePuzzle(Player, puzzleName))
             {
                 Console.WriteLine($"You solved the {puzzleName} puzzle!");
@@ -104,12 +104,10 @@ public class GameManager
         Player.ShowInventory();
     }
 
-    private void Use(string input)
+    private void Use(string itemName)
     {
-        string[] parts = input.Split(' ');
-        if (parts.Length > 1)
+        if (!string.IsNullOrEmpty(itemName))
         {
-            string itemName = parts[1];
             if (!World.UseItem(Player, itemName))
             {
                 Console.WriteLine($"You can't use the {itemName} here.");
@@ -121,12 +119,10 @@ public class GameManager
         }
     }
 
-    private void Take(string input)
+    private void Take(string itemName)
     {
-        string[] parts = input.Split(' ');
-        if (parts.Length > 1)
+        if (!string.IsNullOrEmpty(itemName))
         {
-            string itemName = parts[1];
             if (!World.TakeItem(Player, itemName))
             {
                 Console.WriteLine($"There is no {itemName} here.");
@@ -138,12 +134,10 @@ public class GameManager
         }
     }
 
-    private void Go(string input)
+    private void Go(string direction)
     {
-        string[] parts = input.Split(' ');
-        if (parts.Length > 1)
+        if (!string.IsNullOrEmpty(direction))
         {
-            string direction = parts[1];
             if (World.MovePlayer(Player, direction))
             {
                 Console.WriteLine($"You move {direction}.");
