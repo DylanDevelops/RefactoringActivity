@@ -12,26 +12,38 @@ public class World
 
     private void InitializeWorld()
     {
-        Location start = new("You are at the starting point of your adventure.");
-        Location forest = new("You are in a dense, dark forest.");
-        Location cave = new("You see a dark, ominous cave.");
+        AddLocation("Start", "You are at the starting point of your adventure.", 
+            new Dictionary<string, string> { { "north", "Forest" } },
+            new List<string> { "map" },
+            new List<Puzzle> { new Puzzle("riddle", "What's tall as a house, round as a cup, and all the king's horses can't draw it up?", "well") });
 
-        start.Exits.Add("north", "Forest");
-        forest.Exits.Add("south", "Start");
-        forest.Exits.Add("east", "Cave");
-        cave.Exits.Add("west", "Forest");
+        AddLocation("Forest", "You are in a dense, dark forest.", 
+            new Dictionary<string, string> { { "south", "Start" }, { "east", "Cave" } },
+            new List<string> { "key", "potion" },
+            new List<Puzzle>());
 
-        start.Items.Add("map");
-        forest.Items.Add("key");
-        forest.Items.Add("potion");
-        cave.Items.Add("sword");
+        AddLocation("Cave", "You see a dark, ominous cave.", 
+            new Dictionary<string, string> { { "west", "Forest" } },
+            new List<string> { "sword" },
+            new List<Puzzle>());
+    }
 
-        start.Puzzles.Add(new Puzzle("riddle",
-            "What's tall as a house, round as a cup, and all the king's horses can't draw it up?", "well"));
-
-        Locations.Add("Start", start);
-        Locations.Add("Forest", forest);
-        Locations.Add("Cave", cave);
+    private void AddLocation(string name, string description, Dictionary<string, string> exits, List<string> items, List<Puzzle> puzzles)
+    {
+        Location location = new(description);
+        foreach (var exit in exits)
+        {
+            location.Exits.Add(exit.Key, exit.Value);
+        }
+        foreach (var item in items)
+        {
+            location.Items.Add(item);
+        }
+        foreach (var puzzle in puzzles)
+        {
+            location.Puzzles.Add(puzzle);
+        }
+        Locations.Add(name, location);
     }
 
     public bool MovePlayer(Player player, string direction)
